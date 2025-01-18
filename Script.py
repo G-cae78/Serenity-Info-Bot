@@ -5,33 +5,36 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from dotenv import load_dotenv
 import os
+import requests
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Twilio credentials from .env file
-ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
-RECIPIENT_PHONE_NUMBER = os.getenv("RECIPIENT_PHONE_NUMBER")
+ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_NUMBER')
+RECIPIENT_PHONE_NUMBER = os.getenv('TARGET_NUMBER')
+city= os.getenv('CITY')
+api_key= os.getenv('API_KEY')
+
 
 # Function to scrape weather data
 def get_weather():
-    driver = webdriver.Chrome()  # Make sure to set the correct path to chromedriver if needed
-    driver.get("https://www.weather.com/")  # Change URL if needed
-
-    try:
-        # Wait for the weather element to be visible before accessing it
-        weather_element = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "CurrentConditions--tempValue--3KcTQ"))
-        )
-        weather = weather_element.text
-    except Exception as e:
-        print(f"Error finding weather element: {e}")
-        weather = "Could not retrieve weather"
-
-    driver.quit()
-    return weather
+    api_key = os.getenv("API_KEY")
+    city = os.getenv("CITY")
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+    
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        weather = data['weather'][0]['description']
+        temperature = data['main']['temp']
+        return f"Today's Weather: Weather: {weather}, Temperature: {round(temperature - 273.15)}C"
+    else:
+        print(f"Failed to get weather data. Status code: {response.status_code}")
+        print(f"Response content: {response.content}")
+        return "Failed to get weather data"
 
 # Function to send SMS
 def send_sms(message):
