@@ -2,8 +2,8 @@ name: Scheduled Weather Bot
 
 on:
   schedule:
-    # Runs at 8 AM, 2 PM, and 8 PM UTC
-    - cron: "0 8,14,20 * * *"
+    # Runs at 6 AM, 12 PM, and 7 PM UTC
+    - cron: "0 6,12,19 * * *"
 
 jobs:
   run-script:
@@ -18,38 +18,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-   name: Scheduled Weather Bot
-   
-   on:
-    schedule: 
-     # Runs at 6 AM, 12 PM and 7PM
-     - cron: "0 6,12,19 * * *"
+          python-version: 3.9
 
-   jobs:
-    run-script
-     runss-on: ubuntu-latest
-      
-    steps:
-     # check repo
-     - name: Checkout code
-       uses: actions/checkout@v3
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium twilio python-dotenv
 
-     # setup python environment
-     - name: Set up Python
-       uses: actions/setup-python@v4
-       with:
-        python-version: 3.9
-     
-     # install dependencies
-     - name: Install depedencies
-       run: |
-         python -m pip3 install --upgrade pip3
-         pip3 install selenium twilio python-dotenv
-     # Run the script
-     - name: Run Script
-       env:
-         ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
-         AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-         TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
-         RECEPIENT_PHONE_NUMBER: ${{ secrets.RECEPIENT_PHONENUMBER }}
-       run: python Script.py
+      # Run the script
+      - name: Run Script
+        env:
+          ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+          RECIPIENT_PHONE_NUMBER: ${{ secrets.RECIPIENT_PHONE_NUMBER }}
+        run: python Script.py
