@@ -6,9 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 import requests
 import schedule
 import time
-
-
-
 import os
 
 ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
