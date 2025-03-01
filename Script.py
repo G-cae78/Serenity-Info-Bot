@@ -8,7 +8,7 @@ import os
 import requests
 
 # Load environment variables from .env file
-load_dotenv()
+#load_dotenv()
 
 # Twilio credentials from .env file
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
@@ -17,6 +17,14 @@ TWILIO_PHONE_NUMBER = os.getenv('TWILIO_NUMBER')
 RECIPIENT_PHONE_NUMBER = os.getenv('TARGET_NUMBER')
 city= os.getenv('CITY')
 api_key= os.getenv('API_KEY')
+
+print("Environment Variables:")
+print(f"TWILIO_ACCOUNT_SID: {ACCOUNT_SID}")
+print(f"TWILIO_AUTH_TOKEN: {AUTH_TOKEN}")
+print(f"TWILIO_PHONE_NUMBER: {TWILIO_PHONE_NUMBER}")
+print(f"RECIPIENT_PHONE_NUMBER: {RECIPIENT_PHONE_NUMBER}")
+print(f"CITY: {CITY}")
+print(f"API_KEY: {API_KEY}")
 
 
 # Function to scrape weather data
